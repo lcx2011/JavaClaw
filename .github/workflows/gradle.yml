@@ -1,0 +1,28 @@
+name: Build JavaClaw Jar
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+
+      - name: 构建 Jar
+        run: ./gradlew :app:bootJar
+
+      - name: 上传 Jar 包
+        uses: actions/upload-artifact@v4
+        with:
+          name: javaclaw-app
+          path: app/build/libs/*.jar

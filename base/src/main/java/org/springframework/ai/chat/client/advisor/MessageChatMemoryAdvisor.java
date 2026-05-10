@@ -56,7 +56,8 @@ public final class MessageChatMemoryAdvisor implements BaseChatMemoryAdvisor {
 
     @Override
     public ChatClientRequest before(ChatClientRequest chatClientRequest, AdvisorChain advisorChain) {
-        String conversationId = getConversationId(chatClientRequest.context(), this.defaultConversationId);
+        // 修改1：去掉第二个参数
+        String conversationId = getConversationId(chatClientRequest.context());
 
         List<Message> instructions = chatClientRequest.prompt().getInstructions();
 
@@ -96,7 +97,8 @@ public final class MessageChatMemoryAdvisor implements BaseChatMemoryAdvisor {
                     .map(g -> (Message) g.getOutput())
                     .toList();
         }
-        this.chatMemory.add(this.getConversationId(chatClientResponse.context(), this.defaultConversationId),
+        // 修改2：去掉第二个参数
+        this.chatMemory.add(this.getConversationId(chatClientResponse.context()),
                 assistantMessages);
         return chatClientResponse;
     }
@@ -122,7 +124,8 @@ public final class MessageChatMemoryAdvisor implements BaseChatMemoryAdvisor {
 
     public static final class Builder {
 
-        private String conversationId = ChatMemory.DEFAULT_CONVERSATION_ID;
+        // 修改3：改成 "default" 字符串
+        private String conversationId = "default";
 
         private int order = Advisor.DEFAULT_CHAT_MEMORY_PRECEDENCE_ORDER;
 
